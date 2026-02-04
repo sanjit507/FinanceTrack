@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{% if is_edit %}Edit Goal{% else %}Set Goal{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">{% if is_edit %}Edit Goal{% else %}Set New Goal{% endif %}</h2>
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.name.errors|join:" • " }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Target Amount</label>
+            {{ form.target_amount }}
+            {% if form.target_amount.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.target_amount.errors|join:" • " }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Deadline</label>
+            {{ form.deadline }}
+            {% if form.deadline.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.deadline.errors|join:" • " }}</p>
+            {% endif %}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg">{% if is_edit %}Save Changes{% else %}Set Goal{% endif %}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

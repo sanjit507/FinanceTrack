@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Your Goals{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-6">Your Goals</h2>
+  <a href="{% url 'goal' %}" class="inline-block mb-4 px-4 py-2 bg-indigo-600 text-white rounded-lg">New Goal</a>
+  {% if goals %}
+    <div class="space-y-4">
+      {% for goal in goals %}
+      <div class="p-4 border rounded-lg flex justify-between items-center">
+        <div>
+          <div class="text-lg font-medium">{{ goal.name }}</div>
+          <div class="text-sm text-gray-500">Target: ₹{{ goal.target_amount|floatformat:2 }} • Deadline: {{ goal.deadline }}</div>
+        </div>
+        <div class="space-x-2">
+          <a href="{% url 'goal_edit' goal.pk %}" class="px-3 py-1 bg-yellow-400 text-white rounded">Edit</a>
+          <a href="{% url 'goal_delete' goal.pk %}" class="px-3 py-1 bg-red-500 text-white rounded">Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-600">You have no goals yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

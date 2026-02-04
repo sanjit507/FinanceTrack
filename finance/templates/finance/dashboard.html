@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - DjTrack{% endblock %}
+
+{% block content %}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <!-- Header / Welcome Section -->
+  <div class="mb-10">
+    <h1 class="text-3xl font-bold text-gray-900">Welcome to {{ user.username }}</h1>
+    <p class="mt-2 text-lg text-gray-600">Your personal finance dashboard</p>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+    <!-- Total Income -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
+      <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Income</h3>
+      <p class="mt-4 text-3xl font-bold text-green-600">
+        ₹{{ total_income|default:"0.00"|floatformat:2 }}
+      </p>
+    </div>
+
+    <!-- Total Expenses -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
+      <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Expenses</h3>
+      <p class="mt-4 text-3xl font-bold text-red-600">
+        ₹{{ total_expense|default:"0.00"|floatformat:2 }}
+      </p>
+    </div>
+
+    <!-- Net Savings -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
+      <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide">Net Savings</h3>
+      <p class="mt-4 text-3xl font-bold {% if net_savings >= 0 %}text-indigo-600{% else %}text-red-600{% endif %}">
+        ₹{{ net_savings|default:"0.00"|floatformat:2 }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Goals Progress Section -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="px-6 py-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-gray-800">Your Financial Goals</h2>
+        <a href="{% url 'goal' %}" 
+           class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          New Goal
+        </a>
+      </div>
+    </div>
+
+    <div class="p-6">
+      {% if goal_progress %}
+        <div class="space-y-6">
+          {% for item in goal_progress %}
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-base font-medium text-gray-800">{{ item.goal.name }}</h3>
+              <span class="text-sm font-medium text-gray-600">
+                ₹{{ item.goal.target_amount|floatformat:2 }}
+              </span>
+            </div>
+            <div class="flex justify-end space-x-2 mb-2">
+              <a href="{% url 'goal_edit' item.goal.pk %}" class="text-sm text-yellow-500 hover:underline">Edit</a>
+              <a href="{% url 'goal_delete' item.goal.pk %}" class="text-sm text-red-500 hover:underline">Delete</a>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                class="bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 h-3 rounded-full shadow-sm transition-all duration-500"
+                style="width: {{ item.progress }}%; min-width: 6px;"
+              ></div>
+            </div>
+            <div class="mt-3 flex justify-between items-center text-sm">
+              <div class="text-gray-600">{{ item.progress|floatformat:1 }}% achieved</div>
+              <div class="text-sm {% if item.progress >= 100 %}text-green-600 font-semibold{% else %}text-gray-600{% endif %}">₹{{ item.current_amount|default:"0.00"|floatformat:2 }} saved</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center py-10">
+          <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a5 5 0 00-10 0v2m-2 0h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z" />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-700 mb-2">No goals yet</h3>
+          <p class="text-gray-500 mb-6">Set your first savings goal to start tracking progress</p>
+          <a href="{% url 'goal' %}" 
+             class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition">
+            Create Your First Goal
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

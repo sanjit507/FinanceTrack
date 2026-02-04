@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    
+    <!-- Header -->
+    <div class="px-8 pt-8 pb-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+      <h2 class="text-3xl font-bold text-center">Create Account</h2>
+      <p class="mt-2 text-center text-indigo-100 text-sm">Join us and start your journey</p>
+    </div>
+
+    <!-- Form -->
+    <form method="post" class="px-8 py-10 space-y-6">
+      {% csrf_token %}
+
+      <!-- Non-field errors (e.g. general form errors) -->
+      {% if form.non_field_errors %}
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r text-sm text-red-700">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <!-- Username -->
+      <div class="relative">
+        <input 
+          type="text" 
+          name="username" 
+          id="username" 
+          class="peer w-full px-4 pt-6 pb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white"
+          placeholder=" "
+          required
+          autocomplete="username"
+        >
+        <label 
+          for="username" 
+          class="absolute left-4 top-2 text-xs font-medium text-gray-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-600"
+        >
+          Username
+        </label>
+        {% if form.username.errors %}
+          <p class="mt-1 text-sm text-red-600">{{ form.username.errors|join:" • " }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Email -->
+      <div class="relative">
+        <input 
+          type="email" 
+          name="email" 
+          id="email" 
+          class="peer w-full px-4 pt-6 pb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+          placeholder=" "
+          required
+          autocomplete="email"
+        >
+        <label 
+          for="email" 
+          class="absolute left-4 top-2 text-xs font-medium text-gray-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-600"
+        >
+          Email address
+        </label>
+        {% if form.email.errors %}
+          <p class="mt-1 text-sm text-red-600">{{ form.email.errors|join:" • " }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Password 1 -->
+      <div class="relative">
+        <input 
+          type="password" 
+          name="password1" 
+          id="password1" 
+          class="peer w-full px-4 pt-6 pb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+          placeholder=" "
+          required
+          autocomplete="new-password"
+        >
+        <label 
+          for="password1" 
+          class="absolute left-4 top-2 text-xs font-medium text-gray-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-600"
+        >
+          Password
+        </label>
+        {% if form.password1.errors %}
+          <p class="mt-1 text-sm text-red-600">{{ form.password1.errors|join:" • " }}</p>
+        {% else %}
+          <p class="mt-1 text-xs text-gray-500">Use 8+ characters with letters, numbers & symbols</p>
+        {% endif %}
+      </div>
+
+      <!-- Password 2 -->
+      <div class="relative">
+        <input 
+          type="password" 
+          name="password2" 
+          id="password2" 
+          class="peer w-full px-4 pt-6 pb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+          placeholder=" "
+          required
+          autocomplete="new-password"
+        >
+        <label 
+          for="password2" 
+          class="absolute left-4 top-2 text-xs font-medium text-gray-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-600"
+        >
+          Confirm password
+        </label>
+        {% if form.password2.errors %}
+          <p class="mt-1 text-sm text-red-600">{{ form.password2.errors|join:" • " }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Submit -->
+      <div>
+        <button 
+          type="submit" 
+          class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg"
+        >
+          Create Account
+        </button>
+      </div>
+
+      <!-- Already have account -->
+      <div class="text-center text-sm text-gray-600">
+        Already have an account? 
+        <a href="{% url 'login' %}" class="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">Sign in</a>
+      </div>
+
+      <!-- Back to home -->
+      <div class="text-center">
+        <button 
+          type="button" 
+          onclick="window.location.href='/'" 
+          class="text-sm text-gray-500 hover:text-gray-700 hover:underline"
+        >
+          ← Back to Home
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
